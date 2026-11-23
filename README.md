@@ -1,40 +1,59 @@
 # NVIDIA vGPU Management for Cockpit on RHEL KVM
 
-Add a vGPU Management page and restore saved SR-IOV VFs and vGPU types at host boot. The add-on uses the host's existing Cockpit sign-in and TLS configuration.
+Manage NVIDIA vGPUs from an existing Cockpit instance on RHEL KVM. Choose **Equal-Size**, **Mixed-Size**, or **MIG**, configure SR-IOV VFs, and restore saved configurations at host startup.
+
+RHEL KVM の Cockpit から NVIDIA vGPU を構成するアドオンです。物理 GPU ごとに **Equal-Size**、**Mixed-Size**、**MIG** を選び、SR-IOV VF の設定、VM への割り当て、起動時の復元を管理できます。
 
 | Language | Installation guide | Add-on ZIP |
 | --- | --- | --- |
-| 日本語 | [導入手順](docs/INSTALL.ja.md) | [日本語版 ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm.zip) |
-| English | [Installation guide](docs/INSTALL.en.md) | [English ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm-en.zip) |
+| 日本語 | [導入・更新手順](docs/INSTALL.ja.md) | [日本語版 ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm.zip) |
+| English | [Install and upgrade](docs/INSTALL.en.md) | [English ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm-en.zip) |
 
-The host needs Cockpit, libvirt, NVIDIA vGPU Manager, and the NVIDIA driver. See the installation guides for the supported vGPU configuration and the reboot verification procedure.
+## Supported vGPU modes
 
-既設の Cockpit、libvirt、NVIDIA vGPU Manager、NVIDIA ドライバーを使います。対応する vGPU 構成と再起動後の確認方法は、導入手順書を参照してください。
+| Mode | What the add-on manages |
+| --- | --- |
+| **Equal-Size** | Time-sliced vGPUs with the same framebuffer size on a physical GPU. |
+| **Mixed-Size** | Time-sliced vGPUs with different framebuffer sizes on a capable GPU, such as L40S. Cockpit shows the profiles the driver reports as available for the current configuration. |
+| **MIG** | Graphics-capable GPU instances (`+gfx`) and their default compute instances on RTX PRO 6000 / 4500 Blackwell Server Edition. Create a GI and CI, then configure a MIG-backed vGPU on a VF and select the parent GI. |
 
-## Supported features
+The add-on configures SR-IOV VFs using NVIDIA vendor-specific VFIO. It hides the MIG option on GPUs such as L40S. Mixed-Size in this add-on applies to the physical GPU with MIG disabled. The NVIDIA support matrix lists eligible GPU, driver, and RHEL KVM combinations. [NVIDIA vGPU 21.0 RHEL KVM support matrix](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html)
 
-- **Cockpit access** — Browse the inventory in read-only mode. Switch to Administrative access to change the configuration.
-- **Per-GPU inventory** — Select a physical GPU to view its PCI address, SR-IOV VFs, current and available vGPU profiles, and VM references.
-- **SR-IOV VF enablement** — Enable VFs on the selected physical GPU.
-- **vGPU type configuration** — Apply an available profile to a VF or clear the configured vGPU type.
-- **VM device assignments** — Attach a vGPU to a stopped persistent VM with `managed=no`, update eligible PCI `hostdev` entries to `managed=no`, and detach a VF from all referencing stopped persistent VMs in one operation.
-- **Boot-time restore** — Save VF enablement and vGPU types, then restore them at host startup. Use `--adopt-current` on first installation to save an already active configuration.
-- **Diagnostics and operation history** — View inventory warnings and diagnostic JSON in Cockpit. The system journal records the operation, target, and result under `vgpu-web-cockpit`.
+## Features
 
-Configuration and restore cover time-sliced vGPUs in equal-size mode on non-MIG GPUs using NVIDIA vendor-specific VFIO with SR-IOV VFs. See the [English installation guide](docs/INSTALL.en.md) for prerequisites.
+- Select a physical GPU to inspect its active mode, PCI addresses, SR-IOV VFs, available profiles, and VM references. Cockpit uses the host's existing sign-in and TLS configuration.
+- Use **Administrative access** to apply a mode change, enable VFs, configure or clear a vGPU type, and attach to a stopped persistent VM with `managed=no`. You can update eligible PCI `hostdev` entries and detach a VF from all referencing stopped persistent VMs.
+- In MIG mode, view existing GIs and CIs, including GIs without `+gfx` that occupy candidate placements. Create or delete GIs and CIs and see the parent GI for each configured VF.
+- Use **Startup restore settings** to manage saved modes, GI layouts, VFs, and vGPU types. Checkbox changes apply at the next host boot. libvirt stores VM assignments in the persistent VM definition.
+- Inspect warnings and diagnostic JSON in Cockpit. The system journal records the operation, target, and result under `vgpu-web-cockpit`.
+
+## 対応する vGPU モード
+
+| モード | このアドオンでできること |
+| --- | --- |
+| **Equal-Size** | 物理 GPU 上に、同じフレームバッファ容量のタイムスライス vGPU を構成します。 |
+| **Mixed-Size** | L40S などの対応 GPU 上に、異なるフレームバッファ容量のタイムスライス vGPU を混在させます。ドライバーが現在の構成で作成可能と報告したプロファイルから選択します。 |
+| **MIG** | RTX PRO 6000 / 4500 Blackwell Server Edition で、グラフィックス対応の GI（`+gfx`）と既定 CI を作成し、VF 上の MIG-backed vGPU を親 GI に配置します。 |
+
+構成対象は NVIDIA vendor-specific VFIO の SR-IOV VF です。L40S などでは MIG の選択肢を非表示にします。アドオンでの Mixed-Size 切り替えは、MIG 無効時の物理 GPU が対象です。GPU・ドライバー・RHEL KVM の組み合わせは NVIDIA のサポート表で確認してください。[NVIDIA vGPU 21.0 RHEL KVM 対応表](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html)
 
 ## 対応機能
 
-- **Cockpit の権限管理** — 読み取り専用で構成を確認し、変更時は「管理者アクセス」を使います。
-- **GPU ごとの構成表示** — 物理 GPU を切り替え、PCI アドレス、SR-IOV VF、設定済みと利用可能な vGPU プロファイル、VM からの参照を確認できます。
-- **SR-IOV VF の有効化** — 選択した物理 GPU で VF を有効化します。
-- **vGPU タイプの設定** — VF に利用可能なプロファイルを設定し、設定済みのタイプをクリアできます。
-- **VM への割り当てと解除** — 停止中の永続 VM へ `managed=no` で割り当て、対象の PCI `hostdev` 定義を `managed=no` に更新できます。選択した VF を参照する停止中の永続 VM から一括解除できます。
-- **構成の保存と起動時復元** — VF の有効化と vGPU タイプを保存し、ホスト起動時に復元します。初回導入時の `--adopt-current` で稼働中の構成も保存できます。
-- **診断と操作履歴** — Cockpit で取得時の警告と診断 JSON を確認できます。操作、対象、結果は `vgpu-web-cockpit` としてシステムジャーナルに記録します。
+- 物理 GPU ごとに現在の構成方式、PCI アドレス、SR-IOV VF、作成可能なプロファイル、VM 参照を確認できます。接続には既設 Cockpit のログインと TLS 設定を使用します。
+- **管理者アクセス**でモード変更、VF の有効化、vGPU タイプの設定・クリア、停止中の永続 VM への `managed=no` での割り当てができます。対象の PCI `hostdev` 定義の更新や、VF を参照する停止中 VM からの一括解除にも対応します。
+- MIG のときは GI/CI を作成・削除でき、VF の親 GI を確認できます。配置を占有する `+gfx` なしの既存 GI も表示します。
+- **再起動後の復元設定**でモード、GI 配置、VF、vGPU タイプを管理できます。チェックの変更は次回起動時の復元に反映され、VM の割り当ては libvirt の永続定義に保存されます。
+- Cockpit で警告と診断 JSON を確認できます。操作、対象、結果は `vgpu-web-cockpit` としてシステムジャーナルに記録されます。
 
-構成変更と復元は、NVIDIA vendor-specific VFIO の SR-IOV VF を使用する非 MIG GPU 上の、等サイズモードのタイムスライス vGPU が対象です。前提条件は[日本語の導入手順](docs/INSTALL.ja.md)を参照してください。
+## Install or upgrade / 導入と更新
 
-Sample Image
+The host needs Cockpit, Python 3, libvirt, and a compatible NVIDIA vGPU Manager. Copy the ZIP to the host, extract it, run the bundled `install-cockpit.sh` as a regular user with `sudo` access, and sign back in to Cockpit. Rerun the installer from the updated ZIP to upgrade and keep the saved restore configuration. [English installation steps](docs/INSTALL.en.md)
+
+ホストに Cockpit、Python 3、libvirt、対応する NVIDIA vGPU Manager を用意します。ZIP をホストへ転送・展開し、sudo を使える一般ユーザーで同梱の `install-cockpit.sh` を実行してから、Cockpit にログインし直します。更新時も新しい ZIP で同じ手順を実行すると、既存の復元設定を引き継ぎます。[日本語の導入手順](docs/INSTALL.ja.md)
+
+## Screenshots / 画面例
+
+These screenshots show an earlier version of the inventory. 画像は以前の版の画面例です。
+
 <img width="1733" height="907" alt="sample" src="https://github.com/user-attachments/assets/7fc2809a-1d88-4ae7-ac5f-d142e29df1ff" />
 <img width="1755" height="896" alt="sample2" src="https://github.com/user-attachments/assets/308cc4b6-abb0-4145-a7a9-02390e3a3914" />
