@@ -1,4 +1,3 @@
-<img width="1755" height="896" alt="sample2" src="https://github.com/user-attachments/assets/7537aa70-2de9-48ab-87a8-bb4ba8995d3e" />
 # NVIDIA vGPU Management for Cockpit on RHEL KVM
 
 Add a vGPU Management page and restore saved SR-IOV VFs and vGPU types at host boot. The add-on uses the host's existing Cockpit sign-in and TLS configuration.
