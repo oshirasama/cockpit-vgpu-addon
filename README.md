@@ -58,8 +58,6 @@ The host needs Cockpit, Python 3, libvirt, and a compatible NVIDIA vGPU Manager.
 ホストに Cockpit、Python 3、libvirt、対応する NVIDIA vGPU Manager を用意します。ZIP をホストへ転送・展開し、sudo を使える一般ユーザーで同梱の `install-cockpit.sh` を実行してから、Cockpit にログインし直します。更新時も新しい ZIP で同じ手順を実行すると、既存の復元設定を引き継ぎます。[日本語の導入手順](docs/INSTALL.ja.md)
 
 ## Screenshots / 画面例
-
-These screenshots show an earlier version of the inventory. 画像は以前の版の画面例です。
 <img width="1575" height="999" alt="MIG sample" src="https://github.com/user-attachments/assets/99117ec9-f3cb-45bd-9353-6a315e8f6877" />
 <img width="1694" height="929" alt="Mixed-Size sample" src="https://github.com/user-attachments/assets/623bce01-ddd9-4200-b160-4780ff2946d1" />
 <img width="1719" height="915" alt="Equal-Size sample" src="https://github.com/user-attachments/assets/f40aec29-8ede-4006-b7de-78d54c61ff72" />
