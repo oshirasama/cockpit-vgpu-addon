@@ -54,6 +54,7 @@ The host needs Cockpit, Python 3, libvirt, and a compatible NVIDIA vGPU Manager.
 ## Screenshots / 画面例
 
 These screenshots show an earlier version of the inventory. 画像は以前の版の画面例です。
+<img width="1575" height="999" alt="MIG sample" src="https://github.com/user-attachments/assets/99117ec9-f3cb-45bd-9353-6a315e8f6877" />
+<img width="1694" height="929" alt="Mixed-Size sample" src="https://github.com/user-attachments/assets/623bce01-ddd9-4200-b160-4780ff2946d1" />
+<img width="1719" height="915" alt="Equal-Size sample" src="https://github.com/user-attachments/assets/f40aec29-8ede-4006-b7de-78d54c61ff72" />
 
-<img width="1733" height="907" alt="sample" src="https://github.com/user-attachments/assets/7fc2809a-1d88-4ae7-ac5f-d142e29df1ff" />
-<img width="1755" height="896" alt="sample2" src="https://github.com/user-attachments/assets/308cc4b6-abb0-4145-a7a9-02390e3a3914" />
