@@ -10,3 +10,6 @@ Add a vGPU Management page and restore saved SR-IOV VFs and vGPU types at host b
 The host needs Cockpit, libvirt, NVIDIA vGPU Manager, and the NVIDIA driver. See the installation guides for the supported vGPU configuration and the reboot verification procedure.
 
 既設の Cockpit、libvirt、NVIDIA vGPU Manager、NVIDIA ドライバーを使います。対応する vGPU 構成と再起動後の確認方法は、導入手順書を参照してください。
+
+Sample Image
+<img width="1733" height="907" alt="sample" src="https://github.com/user-attachments/assets/7fc2809a-1d88-4ae7-ac5f-d142e29df1ff" />
