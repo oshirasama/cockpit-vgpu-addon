@@ -2,13 +2,9 @@
 
 ## Overview / 概要
 
-### English
-
 On Red Hat Enterprise Linux (RHEL) KVM and Ubuntu KVM, manually configuring NVIDIA vGPU with vendor-specific VFIO involves several command-line steps. Administrators inspect the GPU's physical function (PF) and SR-IOV virtual functions (VFs), set a vGPU profile on a VF, and assign that VF to a virtual machine (VM) through libvirt. The VM's PCI device entry must specify `managed='no'`. A host reboot disables the VFs, so the host also needs a startup procedure to re-enable them and restore the vGPU configuration. [NVIDIA vGPU Configuration Guide](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
 
 Red Hat documents Cockpit as a way to manage KVM VMs from a browser. This add-on brings vGPU configuration into the same interface on RHEL and Ubuntu. After installation, administrators can inspect PFs and VFs, configure profiles, assign vGPUs to stopped VMs, and choose which settings to restore at startup, all from Cockpit. The add-on sets `managed='no'` during assignment, and its startup service re-enables the VFs and reapplies the saved host configuration. [Red Hat web console documentation](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_systems_in_the_rhel_web_console/installing-web-console-add-ons-and-creating-custom-pages)
-
-### 日本語
 
 Red Hat Enterprise Linux（RHEL）KVM と Ubuntu KVM で、NVIDIA のベンダー固有 VFIO を使って vGPU を手動構成するには、複数のコマンドライン操作が必要です。GPU の物理機能（PF）と SR-IOV 仮想機能（VF）の状態を確認し、VF に vGPU プロファイルを設定して、libvirt で仮想マシン（VM）に割り当てます。その際、VM の PCI デバイス定義に `managed='no'` を指定する必要があります。VF はホストの再起動で無効になるため、同じ構成を使い続けるには、起動時に VF を再有効化し、vGPU 設定を復元する仕組みも必要です。 [NVIDIA vGPU 構成ガイド](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
 
