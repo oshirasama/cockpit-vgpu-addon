@@ -1,19 +1,23 @@
-# NVIDIA vGPU Management for Cockpit on RHEL KVM
+# NVIDIA vGPU Management for Cockpit on RHEL and Ubuntu KVM
+
+## Downloads / ダウンロード
+
+Choose the package for your KVM host and preferred language. Each ZIP includes its installation guide.
+
+KVM ホストの OS と利用する言語に合わせて ZIP を選択してください。各 ZIP に導入手順を同梱しています。
+
+| KVM host / ホスト | Language / 言語 | Add-on ZIP / 配布パッケージ | Installation guide / 導入手順 |
+| --- | --- | --- | --- |
+| RHEL KVM | 日本語 | [Download ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm.zip?raw=true) | [導入・更新手順](docs/INSTALL.ja.md) |
+| RHEL KVM | English | [Download ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm-en.zip?raw=true) | [Install and upgrade](docs/INSTALL.en.md) |
+| Ubuntu 26.04 LTS KVM | 日本語 | [Download ZIP](dist/vgpu-web-cockpit-addon-ubuntu-26.04-ja.zip?raw=true) | [導入・更新手順](docs/INSTALL.ubuntu-26.04.ja.md) |
+| Ubuntu 26.04 LTS KVM | English | [Download ZIP](dist/vgpu-web-cockpit-addon-ubuntu-26.04-en.zip?raw=true) | [Install and upgrade](docs/INSTALL.ubuntu-26.04.en.md) |
 
 ## Overview / 概要
 
-Configuring NVIDIA vGPU on Red Hat Enterprise Linux (RHEL) with KVM involves several steps across the host and the virtual machine. With NVIDIA vendor-specific VFIO, an administrator typically uses the command line to inspect the GPU’s physical function (PF) and SR-IOV virtual functions (VFs), enable VFs, and configure a vGPU profile on a selected VF. The VF is then attached to a VM using `managed='no'` on the PCI `hostdev` entry in its libvirt definition. Because NVIDIA disables the VFs on host reboot, a startup process must re-enable them and reapply the saved vGPU configuration. [NVIDIA vGPU configuration guide](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html#installing-and-configuring-the-nvidia-virtual-gpu-manager-for-red-hat-enterprise-linux-kvm)
+This project adds a **vGPU Management** page to Cockpit on **RHEL KVM** and **Ubuntu 26.04 LTS KVM**. It uses NVIDIA vendor-specific VFIO to inspect physical GPUs and SR-IOV VFs, set vGPU profiles, and assign VFs to stopped VMs. The add-on writes `managed='no'` to the VM's libvirt definition and restores the saved host-side configuration at startup, including re-enabling the VFs. [Cockpit setup](https://cockpit-project.org/running.html) · [NVIDIA vGPU 21.0 configuration guide](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
 
-This project adds a **vGPU Management** page to Cockpit, the RHEL web console that Red Hat documents for browser-based VM management. Once the add-on is installed, administrators can inspect GPUs and VFs, configure vGPUs in **Equal-Size**, **Mixed-Size**, or **MIG** mode, and assign them to stopped VMs from the browser. The add-on sets `managed='no'` when attaching a vGPU and restores saved host-side settings at startup. These day-to-day configuration tasks can be done without entering Linux commands or editing VM XML by hand. [Red Hat documentation for VM management in the web console](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/deploy-setting_up_the_web_console_to_manage_virtual_machines)
-
-Red Hat Enterprise Linux（RHEL）の KVM 環境で NVIDIA vGPU を構成するには、ホストと仮想マシン（VM）の両方で設定が必要です。NVIDIA vendor-specific VFIO を使う場合、通常は Linux のコマンドラインで GPU の物理機能（PF）と SR-IOV の仮想機能（VF）の状態を確認し、VF を有効化して vGPU プロファイルを設定します。VM への割り当てでは、libvirt の VM 定義にある PCI デバイス（`hostdev`）に `managed='no'` を指定します。ホストを再起動すると VF は無効になるため、起動時に VF を再有効化し、保存した vGPU 構成を適用する仕組みも必要です。 [NVIDIA vGPU 構成ガイド](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html#installing-and-configuring-the-nvidia-virtual-gpu-manager-for-red-hat-enterprise-linux-kvm)
-
-これらの作業を一つの画面で行えるように、Red Hat がブラウザーでの VM 管理手段として案内している RHEL Web コンソール（Cockpit）に **vGPU 管理**を追加しました。アドオンの導入後は、GPU と VF の状態確認、**Equal-Size**、**Mixed-Size**、**MIG** での vGPU 構成、停止中の VM への割り当てをブラウザーで行えます。割り当て時の `managed='no'` の指定と、ホスト起動時の構成復元はアドオンが行うため、日常の設定作業で Linux コマンドを入力したり、VM の XML を手作業で編集したりする必要がありません。 [Red Hat の Web コンソールによる VM 管理手順](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/deploy-setting_up_the_web_console_to_manage_virtual_machines)
-
-| Language | Installation guide | Add-on ZIP |
-| --- | --- | --- |
-| 日本語 | [導入・更新手順](docs/INSTALL.ja.md) | [日本語版 ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm.zip) |
-| English | [Install and upgrade](docs/INSTALL.en.md) | [English ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm-en.zip) |
+このプロジェクトは、**RHEL KVM** と **Ubuntu 26.04 LTS KVM** の Cockpit に **vGPU 管理**ページを追加します。NVIDIA vendor-specific VFIO を使用し、物理 GPU と SR-IOV VF の確認、vGPU プロファイル設定、停止中の VM への割り当てをブラウザーから操作できます。割り当て時は libvirt の VM 定義に `managed='no'` を設定し、ホスト起動時には VF を再有効化して保存済みの構成を復元します。 [Cockpit の設定](https://cockpit-project.org/running.html) · [NVIDIA vGPU 21.0 構成ガイド](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
 
 ## Supported vGPU modes
 
@@ -23,7 +27,7 @@ Red Hat Enterprise Linux（RHEL）の KVM 環境で NVIDIA vGPU を構成する�
 | **Mixed-Size** | Time-sliced vGPUs with different framebuffer sizes on a capable GPU, such as L40S. Cockpit shows the profiles the driver reports as available for the current configuration. |
 | **MIG** | Graphics-capable GPU instances (`+gfx`) and their default compute instances on RTX PRO 6000 / 4500 Blackwell Server Edition. Create a GI and CI, then configure a MIG-backed vGPU on a VF and select the parent GI. |
 
-The add-on configures SR-IOV VFs using NVIDIA vendor-specific VFIO. It hides the MIG option on GPUs such as L40S. Mixed-Size in this add-on applies to the physical GPU with MIG disabled. The NVIDIA support matrix lists eligible GPU, driver, and RHEL KVM combinations. [NVIDIA vGPU 21.0 RHEL KVM support matrix](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html)
+The add-on configures SR-IOV VFs using NVIDIA vendor-specific VFIO. It hides the MIG option on GPUs such as L40S. Mixed-Size in this add-on applies to the physical GPU with MIG disabled. Check NVIDIA's platform-specific matrices for the GPU, host release, and mode combination. On Ubuntu 26.04, the vGPU 21.0 Mixed-Size table omits that host release for RTX PRO 6000 / 4500 Blackwell Server Edition and L40S. [RHEL KVM validated platforms](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html) · [Ubuntu validated platforms](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-ubuntu/validated-platforms.html)
 
 ## Features
 
@@ -41,7 +45,7 @@ The add-on configures SR-IOV VFs using NVIDIA vendor-specific VFIO. It hides the
 | **Mixed-Size** | L40S などの対応 GPU 上に、異なるフレームバッファ容量のタイムスライス vGPU を混在させます。ドライバーが現在の構成で作成可能と報告したプロファイルから選択します。 |
 | **MIG** | RTX PRO 6000 / 4500 Blackwell Server Edition で、グラフィックス対応の GI（`+gfx`）と既定 CI を作成し、VF 上の MIG-backed vGPU を親 GI に配置します。 |
 
-構成対象は NVIDIA vendor-specific VFIO の SR-IOV VF です。L40S などでは MIG の選択肢を非表示にします。アドオンでの Mixed-Size 切り替えは、MIG 無効時の物理 GPU が対象です。GPU・ドライバー・RHEL KVM の組み合わせは NVIDIA のサポート表で確認してください。[NVIDIA vGPU 21.0 RHEL KVM 対応表](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html)
+構成対象は NVIDIA vendor-specific VFIO の SR-IOV VF です。L40S などでは MIG の選択肢を非表示にします。アドオンでの Mixed-Size 切り替えは、MIG 無効時の物理 GPU が対象です。GPU・ホスト OS・構成方式の組み合わせは、プラットフォーム別の NVIDIA 対応表で確認してください。vGPU 21.0 の Ubuntu 向け Mixed-Size 表では、RTX PRO 6000 / 4500 Blackwell Server Edition と L40S の対象 OS に Ubuntu 26.04 の記載がありません。 [RHEL KVM 対応表](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-red-hat-el-kvm/validated-platforms.html) · [Ubuntu 対応表](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-release-notes-ubuntu/validated-platforms.html)
 
 ## 対応機能
 
@@ -53,9 +57,9 @@ The add-on configures SR-IOV VFs using NVIDIA vendor-specific VFIO. It hides the
 
 ## Install or upgrade / 導入と更新
 
-The host needs Cockpit, Python 3, libvirt, and a compatible NVIDIA vGPU Manager. Copy the ZIP to the host, extract it, run the bundled `install-cockpit.sh` as a regular user with `sudo` access, and sign back in to Cockpit. Rerun the installer from the updated ZIP to upgrade and keep the saved restore configuration. [English installation steps](docs/INSTALL.en.md)
+Prepare Cockpit, Python 3, libvirt, and a compatible NVIDIA vGPU Manager on the KVM host. Copy and extract the ZIP, then run the bundled installer as a regular user with sudo access. The installer is `vgpu-web/deploy/install-cockpit.sh` on RHEL and `vgpu-web/deploy/install-cockpit-ubuntu.sh` on Ubuntu. Sign in to Cockpit again after installation. For upgrades, rerun the installer from the updated ZIP to carry forward the saved restore settings. See the installation guide in the download table for the selected host.
 
-ホストに Cockpit、Python 3、libvirt、対応する NVIDIA vGPU Manager を用意します。ZIP をホストへ転送・展開し、sudo を使える一般ユーザーで同梱の `install-cockpit.sh` を実行してから、Cockpit にログインし直します。更新時も新しい ZIP で同じ手順を実行すると、既存の復元設定を引き継ぎます。[日本語の導入手順](docs/INSTALL.ja.md)
+KVM ホストに Cockpit、Python 3、libvirt、対応する NVIDIA vGPU Manager を用意します。ZIP を展開し、sudo を使える一般ユーザーで、RHEL は `vgpu-web/deploy/install-cockpit.sh`、Ubuntu は `vgpu-web/deploy/install-cockpit-ubuntu.sh` を実行します。導入後、Cockpit にログインし直します。更新時は新しい ZIP から同じインストーラーを実行すると、保存済みの復元設定を引き継ぎます。詳細はダウンロード表の各導入手順を参照してください。
 
 ## Screenshots / 画面例
 <img width="1575" height="999" alt="MIG sample" src="https://github.com/user-attachments/assets/99117ec9-f3cb-45bd-9353-6a315e8f6877" />
