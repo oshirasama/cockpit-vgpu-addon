@@ -1,5 +1,19 @@
 # NVIDIA vGPU Management for Cockpit on RHEL and Ubuntu KVM
 
+## Overview / 概要
+
+### English
+
+On Red Hat Enterprise Linux (RHEL) KVM and Ubuntu KVM, manually configuring NVIDIA vGPU with vendor-specific VFIO involves several command-line steps. Administrators inspect the GPU's physical function (PF) and SR-IOV virtual functions (VFs), set a vGPU profile on a VF, and assign that VF to a virtual machine (VM) through libvirt. The VM's PCI device entry must specify `managed='no'`. A host reboot disables the VFs, so the host also needs a startup procedure to re-enable them and restore the vGPU configuration. [NVIDIA vGPU Configuration Guide](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
+
+Red Hat documents Cockpit as a way to manage KVM VMs from a browser. This add-on brings vGPU configuration into the same interface on RHEL and Ubuntu. After installation, administrators can inspect PFs and VFs, configure profiles, assign vGPUs to stopped VMs, and choose which settings to restore at startup, all from Cockpit. The add-on sets `managed='no'` during assignment, and its startup service re-enables the VFs and reapplies the saved host configuration. [Red Hat web console documentation](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_systems_in_the_rhel_web_console/installing-web-console-add-ons-and-creating-custom-pages)
+
+### 日本語
+
+Red Hat Enterprise Linux（RHEL）KVM と Ubuntu KVM で、NVIDIA のベンダー固有 VFIO を使って vGPU を手動構成するには、複数のコマンドライン操作が必要です。GPU の物理機能（PF）と SR-IOV 仮想機能（VF）の状態を確認し、VF に vGPU プロファイルを設定して、libvirt で仮想マシン（VM）に割り当てます。その際、VM の PCI デバイス定義に `managed='no'` を指定する必要があります。VF はホストの再起動で無効になるため、同じ構成を使い続けるには、起動時に VF を再有効化し、vGPU 設定を復元する仕組みも必要です。 [NVIDIA vGPU 構成ガイド](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
+
+Red Hat が KVM の VM をブラウザーから管理する方法として案内している Cockpit に、RHEL と Ubuntu 向けの vGPU 管理画面を追加しました。導入後は、PF／VF の確認、プロファイルの設定、停止中の VM への割り当て、起動時に復元する項目の選択まで、コマンドを入力せずに Cockpit から行えます。VM への割り当て時にはアドオンが `managed='no'` を設定し、ホストの起動時には復元サービスが VF を再有効化して保存済みの構成を適用します。 [Red Hat の Web コンソールドキュメント](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_systems_in_the_rhel_web_console/installing-web-console-add-ons-and-creating-custom-pages)
+
 ## Downloads / ダウンロード
 
 Choose the package for your KVM host and preferred language. Each ZIP includes its installation guide.
@@ -12,12 +26,6 @@ KVM ホストの OS と利用する言語に合わせて ZIP を選択してく�
 | RHEL KVM | English | [Download ZIP](dist/vgpu-web-cockpit-addon-rhel-kvm-en.zip?raw=true) | [Install and upgrade](docs/INSTALL.en.md) |
 | Ubuntu 26.04 LTS KVM | 日本語 | [Download ZIP](dist/vgpu-web-cockpit-addon-ubuntu-26.04-ja.zip?raw=true) | [導入・更新手順](docs/INSTALL.ubuntu-26.04.ja.md) |
 | Ubuntu 26.04 LTS KVM | English | [Download ZIP](dist/vgpu-web-cockpit-addon-ubuntu-26.04-en.zip?raw=true) | [Install and upgrade](docs/INSTALL.ubuntu-26.04.en.md) |
-
-## Overview / 概要
-
-This project adds a **vGPU Management** page to Cockpit on **RHEL KVM** and **Ubuntu 26.04 LTS KVM**. It uses NVIDIA vendor-specific VFIO to inspect physical GPUs and SR-IOV VFs, set vGPU profiles, and assign VFs to stopped VMs. The add-on writes `managed='no'` to the VM's libvirt definition and restores the saved host-side configuration at startup, including re-enabling the VFs. [Cockpit setup](https://cockpit-project.org/running.html) · [NVIDIA vGPU 21.0 configuration guide](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
-
-このプロジェクトは、**RHEL KVM** と **Ubuntu 26.04 LTS KVM** の Cockpit に **vGPU 管理**ページを追加します。NVIDIA vendor-specific VFIO を使用し、物理 GPU と SR-IOV VF の確認、vGPU プロファイル設定、停止中の VM への割り当てをブラウザーから操作できます。割り当て時は libvirt の VM 定義に `managed='no'` を設定し、ホスト起動時には VF を再有効化して保存済みの構成を復元します。 [Cockpit の設定](https://cockpit-project.org/running.html) · [NVIDIA vGPU 21.0 構成ガイド](https://docs.nvidia.com/vgpu/21.0/grid-vgpu-user-guide/installing-configuring-grid-vgpu.html)
 
 ## Supported vGPU modes
 
