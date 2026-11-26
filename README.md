@@ -10,6 +10,22 @@ Red Hat Enterprise Linux（RHEL）KVM と Ubuntu KVM で、NVIDIA のベンダ�
 
 Red Hat が KVM の VM をブラウザーから管理する方法として案内している Cockpit に、RHEL と Ubuntu 向けの vGPU 管理画面を追加しました。導入後は、PF／VF の確認、プロファイルの設定、停止中の VM への割り当て、起動時に復元する項目の選択まで、コマンドを入力せずに Cockpit から行えます。VM への割り当て時にはアドオンが `managed='no'` を設定し、ホストの起動時には復元サービスが VF を再有効化して保存済みの構成を適用します。 [Red Hat の Web コンソールドキュメント](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_systems_in_the_rhel_web_console/installing-web-console-add-ons-and-creating-custom-pages)
 
+## Prerequisites / 前提条件
+
+Complete the following setup before installing the add-on.
+
+- Configure KVM and libvirt on the target host.
+- Install and configure a compatible NVIDIA vGPU Manager on the host.
+- Create the VMs that will use vGPUs.
+- Install and configure Cockpit on the host, and verify that you can sign in.
+
+アドオンを導入する前に、以下の準備を済ませてください。
+
+- 対象ホストで KVM と libvirt を構成済みであること。
+- ホストに対応する NVIDIA vGPU Manager を導入・構成済みであること。
+- vGPU を割り当てる VM を作成済みであること。
+- ホストで Cockpit を導入・構成済みで、ログインできること。
+
 ## Downloads / ダウンロード
 
 Choose the package for your KVM host and preferred language. Each ZIP includes its installation guide.
